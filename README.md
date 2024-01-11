@@ -16,7 +16,7 @@ Upcoming Features :
 
 This application will allow you to search a city and get back the current weather as well as a forecast for the next five days! It is not restricted to the United States so you can look up ANY city in the world. 
 
-Deployed Application: 
+Deployed Application: https://schtitle24.github.io/Weather-App/
 
 Repository Link: 
 
