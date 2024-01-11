@@ -12,31 +12,30 @@ const mockData = [
   }
 ]
 
-function getCityLat (){
-  return fetch("http://api.openweathermap.org/geo/1.0/direct?q=Austin&limit=15&appid=b9047678ef9479ef9ad4ca22e0b5c564")
-  
+function getCityLat (lat, lon){
+  fetch( `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=b9047678ef9479ef9ad4ca22e0b5c564`)
+  .then(response => response.json())
+    .then(data => console.log(data));
 }
 
+function searchCity(city) {
+  fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=b9047678ef9479ef9ad4ca22e0b5c564`)
+    .then(response => response.json())
+    .then((data) => {
+      console.log(data)
+    });
+  }
 function handleSearch (event) {
   event.preventDefault();
 
-  const userInput = {
-    city: userSearch.value.trim()
-  };
+  const userInput = userSearch.value.trim();
   console.log(userInput);
 }
 
-getCityLat(); // delete this
+// getCityLat(); // delete this
 form.addEventListener("submit", handleSearch);
 
 function renderWeather () {
-
-  
-  
-  
-  
-  
-  
  for (let i = 0; i < mockData.length; i++) { 
   const forecast = mockData[i]
 
