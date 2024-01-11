@@ -2,6 +2,7 @@ const mainDiv = document.querySelector("#current");
 const form = document.querySelector('form');
 const userSearch = document.querySelector('#input')
 
+//replace with data from API
 const mockData = [
   {
     city: 'Austin',
