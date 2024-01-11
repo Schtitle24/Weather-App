@@ -1,4 +1,4 @@
-const mainDiv = document.querySelector("main");
+const mainDiv = document.querySelector("#current");
 const form = document.querySelector('form');
 const userSearch = document.querySelector('#input')
 
@@ -12,24 +12,73 @@ const mockData = [
   }
 ]
 
-function getCityLat (lat, lon){
-  fetch( `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=b9047678ef9479ef9ad4ca22e0b5c564`)
-  .then(response => response.json())
-    .then(data => console.log(data));
+function getCityLat(lat, lon) {
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=b9047678ef9479ef9ad4ca22e0b5c564`)
+    .then(response => response.json())
+    .then(data => {
+      const forecastData = data.list;
+
+      const indexes = [4, 12, 20, 28, 36];
+
+      indexes.forEach(index => {
+        const forecast = forecastData[index];
+        const card = createWeatherCard(forecast);
+        const container = document.querySelector('#fiveDay');
+        container.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
 }
+
+function createWeatherCard(forecast) {
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  const date = document.createElement("p");
+  date.textContent = forecast.dt_txt;
+  card.appendChild(date);
+
+  const temperature = document.createElement("p");
+  temperature.textContent = `Temperature: ${forecast.main.temp}°F`;
+  card.appendChild(temperature);
+
+  const wind = document.createElement("p");
+  wind.textContent = `Wind: ${forecast.wind.speed} mph`;
+  card.appendChild(wind);
+
+  const humidity = document.createElement("p");
+  humidity.textContent = `Humidity: ${forecast.main.humidity}%`;
+  card.appendChild(humidity);
+
+  return card;
+}
+
+
 
 function searchCity(city) {
   fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=b9047678ef9479ef9ad4ca22e0b5c564`)
     .then(response => response.json())
-    .then((data) => {
-      console.log(data)
+    .then(data => {
+      console.log(data);
+      if (data.length > 0) {
+        const { lat, lon } = data[0];
+        getCityLat(lat, lon);
+      } else {
+        console.log("No results found for the city");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
     });
-  }
+}
 function handleSearch (event) {
   event.preventDefault();
 
   const userInput = userSearch.value.trim();
   console.log(userInput);
+  searchCity(userInput);
 }
 
 // getCityLat(); // delete this
